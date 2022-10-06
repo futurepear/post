@@ -53,7 +53,7 @@ class Worker extends Grape {
   connect(socket, data) {
     this.worker.send(
       ["FORWARD-HTTP-REQ",
-        { buffer: data }],
+        { rawheaders: data.toString() }],
       socket);
   }
 }
@@ -113,6 +113,8 @@ class loadBalancer {
         //socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
+        console.log("--------------------------------------------------------");
+        console.log(data.toString());
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
@@ -219,10 +221,12 @@ class Branch {
     this._events = {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
-        console.log(Buffer.from(msg.buffer).toString());
+        let buffer = Buffer.from(msg.rawheaders);
+        console.log(msg.rawheaders);
+        console.log("--------------------------------------------------------");
         this.server.emit("connection", socket);
         socket.resume();
-        socket.emit("data", Buffer.from(msg.buffer));
+        socket.emit("data", buffer);
       },
       "CONFIGURE": () => {
 
