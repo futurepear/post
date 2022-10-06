@@ -8,7 +8,7 @@ server.balance((socket, req) => {
 server.branch("S1", "test.js");
 server.branch("S2", "test.js");
 
-server.listen(3000);
+server.listen(process.env.PORT);
 
 
 
@@ -123,11 +123,11 @@ aaa.on("error", (er) => {
   return;
   client.write("")
   console.log("c");  console.log("shhshshshshe" + client.remoteAddress);
- 
+
   let host = "uniqueappname12.herokuapp.com";
   let host2 = "uniqueappname12.herokuapp.com";
   //host = "dijeojied.futurepear.repl.co";
- 
+
     let proxy = net.connect({host: host, port: 80}, () => {
       console.log("connected");
     });
@@ -139,7 +139,7 @@ aaa.on("error", (er) => {
       });
     });
     client.on("end", () => {
-    
+   
     });
     client.on("data", (data) => {
       //console.log(data.toString());
@@ -183,7 +183,7 @@ User-Agent: Mozilla/5.0 (X11; CrOS x86_64 14268.89.0) AppleWebKit/537.36 (KHTML,
 -*/
 /*
   const fs = require("fs");
- 
+
   fs.unlinkSync("/tmp/socket1");
   let a = net.createServer((socket) => {
     console.log("connection to UNIX SOCKET");
