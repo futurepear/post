@@ -53,7 +53,7 @@ class Worker extends Grape {
   connect(socket, data) {
     this.worker.send(
       ["FORWARD-HTTP-REQ",
-        { rawheaders: data.toString() }],
+        { buffer: data }],
       socket);
   }
 }
@@ -219,11 +219,10 @@ class Branch {
     this._events = {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
-        let buffer = Buffer.from(msg.rawheaders);
-        console.log(msg.rawheaders);
+        console.log(Buffer.from(msg.buffer).toString());
         this.server.emit("connection", socket);
         socket.resume();
-        socket.emit("data", buffer);
+        socket.emit("data", Buffer.from(msg.buffer));
       },
       "CONFIGURE": () => {
 
