@@ -111,7 +111,7 @@ class loadBalancer {
       //waits for the client to send the headers 
       let id = Math.random();
       socket.on("data", (data) => {
-        socket.pause();
+        //socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
         console.log(id + " " + data.toString().substring(0, 30));
