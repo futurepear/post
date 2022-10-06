@@ -109,11 +109,12 @@ class loadBalancer {
       callback(socket);
       this.emit("connection", socket);
       //waits for the client to send the headers 
+      let id = Math.random();
       socket.on("data", (data) => {
         socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
-        console.log(data.toString());
+        console.log(id + " " + data.toString().substring(0, 30));
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
