@@ -3,8 +3,10 @@ const server = grape.createLoadBalancer();
 
 
 server.balance((socket, req) => {
+  console.log('a');
   return null;
 });
+
 server.branch("S1", "test.js");
 server.branch("S2", "test.js");
 
@@ -139,7 +141,7 @@ aaa.on("error", (er) => {
       });
     });
     client.on("end", () => {
-   
+ 
     });
     client.on("data", (data) => {
       //console.log(data.toString());
