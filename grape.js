@@ -123,6 +123,7 @@ class loadBalancer {
           worker = this._grapes[keys[Math.round(Math.random() * (keys.length - 1))]];
         }
         //this.emit("redirect", worker);
+        if (req.Method == "POST") return;
         if (worker == null) return;
         worker.connect(socket, data);
       });
