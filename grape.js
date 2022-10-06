@@ -110,7 +110,7 @@ class loadBalancer {
       this.emit("connection", socket);
       //waits for the client to send the headers 
       socket.on("data", (data) => {
-        if (socket.messages > 0) return;
+        socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
         console.log(data.toString());
@@ -222,6 +222,7 @@ class Branch {
         if (socket == null) return;
         let buffer = Buffer.from(msg.rawheaders);
         this.server.emit("connection", socket);
+        socket.resume();
         socket.emit("data", buffer);
       },
       "CONFIGURE": () => {
