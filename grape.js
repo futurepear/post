@@ -115,6 +115,7 @@ class loadBalancer {
         let req = parseHTTP(data.toString());
         console.log("--------------------------------------------------------");
         console.log(data.toString());
+        console.log("--------------------------------------------------------");
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
@@ -123,7 +124,7 @@ class loadBalancer {
           worker = this._grapes[keys[Math.round(Math.random() * (keys.length - 1))]];
         }
         //this.emit("redirect", worker);
-        if (req.Method == "POST") return;
+        if (req.Method == "POST" || req.Method == null) return;
         if (worker == null) return;
         worker.connect(socket, data);
       });
