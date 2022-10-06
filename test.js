@@ -9,9 +9,9 @@ const app = express();
 const server = http.createServer(app);
 const branch = grape.setupBranch(server);
 
-app.use(bodyParser.json());
 //support parsing of application/x-www-form-urlencoded post data
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 //catch body parser errors
 app.use((err, req, res, next) => {
   if (err) {
