@@ -6,8 +6,8 @@ const child_process = require("child_process");
 
 const symbolServer = Symbol("subServer");
 
-function parseHTTP(req) {
-  req = req.split(/\r\n/);
+function parseHTTP(rawreq) {
+  let req = rawreq.split(/\r\n/);
   let headers = {};
   for (let i in req) {
     let key = req[i].split(':', 1)[0];
@@ -109,12 +109,10 @@ class loadBalancer {
       callback(socket);
       this.emit("connection", socket);
       //waits for the client to send the headers 
-      let id = Math.random();
       socket.on("data", (data) => {
         //socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
-        console.log(id + " " + data.toString());
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
@@ -222,6 +220,7 @@ class Branch {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
         let buffer = Buffer.from(msg.rawheaders);
+        console.log(msg.rawheaders);
         this.server.emit("connection", socket);
         socket.resume();
         socket.emit("data", buffer);
