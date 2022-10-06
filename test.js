@@ -28,6 +28,6 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  console.log('post' + JSON.stringify(req.body));
+  console.log('post recieved' + process.env.serer);
   res.end(JSON.stringify({ a: 'a' }));
 });

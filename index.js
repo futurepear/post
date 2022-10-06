@@ -7,8 +7,12 @@ server.balance((socket, req) => {
   return null;
 });
 
-server.branch("S1", "test.js");
-server.branch("S2", "test.js");
+server.branch("S1", "test.js", {
+  env: { "server": "S1" }
+});
+server.branch("S2", "test.js", {
+  env: { "server": "S2" }
+});
 
 server.listen(process.env.PORT);
 
@@ -141,7 +145,7 @@ aaa.on("error", (er) => {
       });
     });
     client.on("end", () => {
- 
+
     });
     client.on("data", (data) => {
       //console.log(data.toString());
