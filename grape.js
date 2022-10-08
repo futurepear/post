@@ -114,7 +114,7 @@ class loadBalancer {
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
         console.log("--------------------------------------------------------");
-        console.log(data.toString());
+        console.log(data.toString().substring(0, 35));
         console.log("--------------------------------------------------------");
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
@@ -224,8 +224,8 @@ class Branch {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
         let buffer = Buffer.from(msg.rawheaders);
-        socket.on('data', () => {
-          console.log('recieved Data after sent');
+        socket.on('data', (data) => {
+          console.log('recieved Data after sent' + data.toString().substring(0, 30));
         });
         this.server.emit("connection", socket);
         socket.resume();
