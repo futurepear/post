@@ -109,11 +109,12 @@ class loadBalancer {
       callback(socket);
       this.emit("connection", socket);
       //waits for the client to send the headers 
+      let id = Math.random();
       socket.on("data", (data) => {
         //socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
-        console.log("--------------------------------------------------------");
+        console.log("--------------------------------------------------------"); console.log(id);
         console.log(data.toString().substring(0, 35));
         console.log("--------------------------------------------------------");
         let key = this._balancer(socket, req, data);
@@ -228,7 +229,6 @@ class Branch {
           console.log('recieved Data after sent' + data.toString().substring(0, 30));
         });
         this.server.emit("connection", socket);
-        socket.resume();
         socket.emit("data", buffer);
       },
       "CONFIGURE": () => {
