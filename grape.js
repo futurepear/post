@@ -117,9 +117,9 @@ class loadBalancer {
         //socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
-        console.log("--------------------------------------------------------"); console.log(id);
+        console.log("----------------------------------------------------------"); console.log(id);
         console.log(data.toString());
-        console.log("--------------------------------------------------------");
+        console.log("----------------------------------------------------------");
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
@@ -233,6 +233,9 @@ class Branch {
         });*/
         this.server.emit("connection", socket);
         socket.emit("data", buffer);
+        socket.on("data", (data) => {
+          console.log("BRUHH" + data.toString());
+        });
       },
       "CONFIGURE": () => {
 
