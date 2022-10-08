@@ -105,11 +105,6 @@ class loadBalancer {
     //new net server to listen for TCP connections
     this.server.ID = "GRAPE_LOAD_BALANCER";
 
-
-    //CHECK THE TIME WHEN DATA ARRIVES: APPEARS TO COME AT EXAT SAME TIME
-
-
-
     this.server.on("connection", (socket) => {
       callback(socket);
       this.emit("connection", socket);
@@ -118,7 +113,7 @@ class loadBalancer {
       let id = Math.random();
       socket.on("data", (data) => {
         console.log(Date.now());
-        //socket.pause();
+        socket.pause();
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
         console.log("----------------------------------------------------------"); console.log(id);
@@ -232,6 +227,7 @@ class Branch {
     this._events = {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
+        socket.resume();
         let buffer = Buffer.from(msg.rawheaders);
         console.log('here');
         this.server.emit("connection", socket);
