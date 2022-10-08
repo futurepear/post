@@ -110,6 +110,9 @@ class loadBalancer {
       this.emit("connection", socket);
       //waits for the client to send the headers 
       let id = Math.random();
+      socket.on("end", () => {
+        console.log(id + 'end');
+      });
       socket.on("data", (data) => {
         //socket.pause();
         if (socket.zaz) return;
@@ -125,7 +128,7 @@ class loadBalancer {
           worker = this._grapes[keys[Math.round(Math.random() * (keys.length - 1))]];
         }
         //this.emit("redirect", worker);
-        //if (req.Method != "GET") return;
+        if (req.Method != "GET") return;
         if (worker == null) return;
         worker.connect(socket, data);
       });
