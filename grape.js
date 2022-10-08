@@ -110,6 +110,7 @@ class loadBalancer {
       this.emit("connection", socket);
       //waits for the client to send the headers 
       let selectedServer = null;
+      let id = Math.random();
       socket.on("data", (data) => {
         //socket.pause();
         if (socket.zaz) return;
