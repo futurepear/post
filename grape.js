@@ -7,7 +7,9 @@ const child_process = require("child_process");
 const symbolServer = Symbol("subServer");
 
 function parseHTTP(rawreq) {
-  let req = rawreq.split(/\r\n/);
+  let firstsplit = rawreq.split(/\r\n\r\n/);
+  let body = firstsplit[1];
+  let req = firstsplit[0].split(/\r\n/);
   let headers = {};
   for (let i in req) {
     let key = req[i].split(':', 1)[0];
@@ -19,6 +21,7 @@ function parseHTTP(rawreq) {
   headers.Method = firstline[0];
   headers.Path = firstline[1];
   headers.Version = firstline[2];
+  headers.body = body;
   return headers;
 }
 
@@ -54,7 +57,7 @@ class Worker extends Grape {
     this.worker.send(
       ["FORWARD-HTTP-REQ",
         { rawheaders: data.toString() }],
-      socket, { keepOpen: true });
+      socket, { keepOpen: false });
   }
 }
 
@@ -108,17 +111,18 @@ class loadBalancer {
     this.server.on("connection", (socket) => {
       callback(socket);
       this.emit("connection", socket);
+      let selectedWorker = null;
+      let awaitingBody = false;
+      let savedData = null;
       //waits for the client to send the headers 
-      let selectedServer = null;
-      let id = Math.random();
       socket.on("data", (data) => {
-        console.log(Date.now());
-        socket.pause();
+        if (awaitingBody) {
+          selectedWorker.connect(socket, savedData.toString() + data.toString());
+          return;
+        }
+
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
-        console.log("----------------------------------------------------------"); console.log(id);
-        console.log(data.toString());
-        console.log("----------------------------------------------------------");
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
         //if the worker doesnt exist choose random worker
@@ -126,10 +130,17 @@ class loadBalancer {
           let keys = Object.keys(this._avaliableServers);
           worker = this._grapes[keys[Math.round(Math.random() * (keys.length - 1))]];
         }
+        console.log(req.body);
+        console.log(req.body.length);
+        selectedWorker = worker;
+        if ('Content-Length' in req && (req.body.length != req['Content-Length'])) {
+          savedData = data;
+          awaitingBody = true;
+          return;
+        }
+
         //this.emit("redirect", worker);
-        //if (req.Method != "GET") return;
         if (worker == null) return;
-        //if(selectedServer != null) worker = selectedServer;
         worker.connect(socket, data);
       });
     });
@@ -227,14 +238,10 @@ class Branch {
     this._events = {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
-        socket.resume();
+        console.log(msg.rawheaders);
         let buffer = Buffer.from(msg.rawheaders);
-        console.log('here');
         this.server.emit("connection", socket);
         socket.emit("data", buffer);
-        socket.on("data", (data) => {
-          console.log("BRUHH" + data.toString());
-        });
       },
       "CONFIGURE": () => {
 
