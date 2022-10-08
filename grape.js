@@ -109,10 +109,7 @@ class loadBalancer {
       callback(socket);
       this.emit("connection", socket);
       //waits for the client to send the headers 
-      let id = Math.random();
-      socket.on("end", () => {
-        console.log(id + 'end');
-      });
+      let selectedServer = null;
       socket.on("data", (data) => {
         //socket.pause();
         if (socket.zaz) return;
@@ -130,6 +127,7 @@ class loadBalancer {
         //this.emit("redirect", worker);
         //if (req.Method != "GET") return;
         if (worker == null) return;
+        //if(selectedServer != null) worker = selectedServer;
         worker.connect(socket, data);
       });
     });
@@ -231,7 +229,7 @@ class Branch {
         /*socket.on('data', (data) => {
           console.log('recieved Data after sent' + data.toString().substring(0, 30));
         });*/
-        socket.resume();
+        console.log('here');
         this.server.emit("connection", socket);
         socket.emit("data", buffer);
         socket.on("data", (data) => {
