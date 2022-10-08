@@ -130,7 +130,9 @@ class loadBalancer {
           let keys = Object.keys(this._avaliableServers);
           worker = this._grapes[keys[Math.round(Math.random() * (keys.length - 1))]];
         }
+        console.log("----------------------------------------");
         console.log(data.toString());
+        console.log("----------------------------------------");
         selectedWorker = worker;
         if ('Content-Length' in req && (req.body.length != req['Content-Length'])) {
           savedData = data;
