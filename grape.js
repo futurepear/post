@@ -224,8 +224,9 @@ class Branch {
       "FORWARD-HTTP-REQ": (msg, socket) => {
         if (socket == null) return;
         let buffer = Buffer.from(msg.rawheaders);
-        console.log(msg.rawheaders);
-        console.log("--------------------------------------------------------");
+        socket.on('data', () => {
+          console.log('recieved Data after sent');
+        });
         this.server.emit("connection", socket);
         socket.resume();
         socket.emit("data", buffer);
