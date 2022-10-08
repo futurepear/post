@@ -54,7 +54,7 @@ class Worker extends Grape {
     this.worker.send(
       ["FORWARD-HTTP-REQ",
         { rawheaders: data.toString() }],
-      socket);
+      socket, { keepOpen: true });
   }
 }
 
@@ -231,6 +231,7 @@ class Branch {
         /*socket.on('data', (data) => {
           console.log('recieved Data after sent' + data.toString().substring(0, 30));
         });*/
+        socket.resume();
         this.server.emit("connection", socket);
         socket.emit("data", buffer);
         socket.on("data", (data) => {

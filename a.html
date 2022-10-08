@@ -2,11 +2,18 @@ loaded
 <script>
   document.addEventListener("click", test);
  async function test(){
+   let b = () => {
+     let c = "";
+     for(let i = 0; i < 2; i++){
+       c+="aiohfhoaahofahiofsihofihoahiofihoafoiabjbadfbdfbfdahbkhadfbkhfdabaksfbkjdafbhdfbhdabkhfkbhfdashbkadfskhbjdfaskahbkdsfkashbkfhbabhfkhbahbkfhbafkbhkafhbkdafkhahbkdfhakh0h92"
+     }
+     return c;
+   }
     try{
     let a  = await fetch("/", {
         method: "POST",
         headers: { 'Content-Type': 'application/json;charset=utf-8' },
-        body: JSON.stringify({ data: "sdohaiohfhoaahofahiofsihofihoahiofihoafoiabjbadfbdfbfdahbkhadfbkhfdabaksfbkjdafbhdfbhdabkhfkbhfdashbkadfskhbjdfaskahbkdsfkashbkfhbabhfkhbahbkfhbafkbhkafhbkdafkhahbkdfhakh0h92fhie" })
+        body: JSON.stringify({ data: b() })
     });
     let z = await a.json();
      document.body.innerHTML += (JSON.stringify(z));
