@@ -118,7 +118,7 @@ class loadBalancer {
         if (socket.zaz) return;
         let req = parseHTTP(data.toString());
         console.log("--------------------------------------------------------"); console.log(id);
-        console.log(data.toString().substring(0, 35));
+        console.log(data.toString());
         console.log("--------------------------------------------------------");
         let key = this._balancer(socket, req, data);
         let worker = this._grapes[key];
